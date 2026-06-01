@@ -1,21 +1,21 @@
 import os
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv
 import sqlalchemy as sa
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 load_dotenv()
 
-print(os.getenv("DATABASE_URL"))
+DATABASE_URL = os.getenv("DATABASE_URL")
+engine = sa.create_engine(DATABASE_URL)
 
-engine = sa.create_engine(os.getenv("DATABASE_URL"))
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
-try:
-    connection = engine.connect()
-    print("Database connection successful!")
-
-except Exception as excep:
-    print(f"Connection failed: {excep}")
-
-metadata = sa.MetaData()
+class Base(DeclarativeBase):
+    pass
 
 
 
